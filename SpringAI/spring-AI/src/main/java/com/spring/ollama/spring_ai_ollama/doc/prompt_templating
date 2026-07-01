@@ -1,0 +1,73 @@
+When working with LLMs (Gemini, OpenAI, Spring AI), messages usually have these roles:
+
+Role	Purpose
+System	Defines the AI's behavior, rules, and personality. Highest priority.
+User	The human's input, question, or request.
+Assistant	Previous AI responses in the conversation. Used for maintaining context.
+Tool / Function	Output returned by an external function, API, database, or tool that the AI requested to use.
+
+Example Conversation
+1. System
+You are a senior Java architect.
+Answer concisely with examples.
+
+Sets the AI's behavior.
+
+2. User
+Explain Dependency Injection.
+
+The actual question.
+
+3. Assistant
+Dependency Injection is a design pattern where dependencies
+are provided by a framework instead of being created manually.
+
+The AI's response.
+
+4. Tool / Function Call
+
+AI decides it needs external data:
+
+{
+  "tool": "getWeather",
+  "arguments": {
+    "city": "Delhi"
+  }
+}
+
+Tool executes:
+
+{
+  "temperature": 38,
+  "condition": "Sunny"
+}
+
+This becomes a tool message.
+
+5. Assistant (after tool result)
+The current weather in Delhi is 38°C and Sunny.
+
+AI uses the tool output to generate the final response.
+
+In Spring AI
+ChatResponse response = chatModel.call(
+    new Prompt(
+        List.of(
+            new SystemMessage("You are a Java expert."),
+            new UserMessage("Explain Spring Boot.")
+        )
+    )
+);
+
+Or with ChatClient:
+
+chatClient.prompt()
+    .system("You are a Java expert.")
+    .user("Explain Spring Boot.")
+    .call()
+    .content();
+Priority Order
+System > User > Assistant History > Tool Results
+System controls behavior.
+User asks questions.
+Assistant preserves conversation context.

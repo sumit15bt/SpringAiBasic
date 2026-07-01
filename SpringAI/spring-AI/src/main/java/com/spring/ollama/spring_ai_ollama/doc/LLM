@@ -1,0 +1,40 @@
+LLM are stateless
+1. They don't remember what was said earlier
+2. Each interaction is treated like fresh one
+
+
+Spring AI solution
+
+Chat Memory
+Chat Memory Repository
+
+
+Chat Memory ==> it interact with Chat Memory Repository
+ 1. What to store
+ 2. Strategies :-
+    * keep last N msg
+    * time period
+    * with that token limit
+
+ Give memory across multiple interaction
+ There are multiple implementation classes strategies
+
+ Chat Memory Repository (DB) ==>
+
+ 1. storage engine
+ 2. to store data
+ 3. saving and reading data
+
+
+ ChatMemory  <- implementation default MessageWindowChatMemory
+
+
+ InMemoryChatMemoryRepository implements ChatMemoryRepository
+
+ we can also implement our own chatMemory in DB like JdbcChatMemoryRepository | CassandraChatMemoryRepository | Neo4jChatMemoryRepository
+
+
+Advisory => MessageChatMemoryAdvisor (add msg with roles in prompt )
+            , PromptChatMemoryAdvisor (memory as plain text)
+
+            vectorStoreChatMemoryAdvisor (for vector type memory )  ==> have to add explicitly dependency  by default not available
